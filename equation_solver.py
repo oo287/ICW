@@ -19,4 +19,3 @@ def y_amplitudes(m_mat, k_mat, omega, f_vector):
     return y_vector
 
 #y_amplitudes([[100, 0],[0, 1]],[[-1, 1],[1, -1]],1,[0,1])
-

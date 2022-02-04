@@ -1,14 +1,92 @@
 import sys, pygame
 from random import randint
 import numpy as np
+from equation_solver import y_amplitudes
+
+print("\n\nPlease input the name of the txt file to read mass and stiffness matrices and force vector from.\n")
+
+s = False
+
+while not s:
+
+    filename = input("File name: ")
+
+    try:
+
+        txt_file = open(filename,"r").readlines()
+
+        s = True
+
+    except:
+
+        try:
+            
+            txt_file = open(str(filename) + ".txt","r").readlines()
+
+            s = True
+
+        except:
+
+            print("Failed to open file.")
+
+text = []
+
+for line in txt_file:
+
+    a = line.split(",")
+    
+    text.append(a[0:-1]+[a[-1][0:-1]]) # Remove the \n s from the last items on each line
+
+n = len(text[0])
+
+for line in text[0:-1]:
+
+    if len(line) != n:
+
+        raise("Dimension Error- Matrices must be square")
+
+if len(text) != 2*n+2:
+
+    raise("Dimension Error- Matrices must be of the same size")
+
+m_matrix = np.zeros((n,n))
+k_matrix = np.zeros((n,n))
+f_vector = np.zeros(n)
+omega = 0.0
+
+try:
+
+    for j in range(0,n):
+
+        for i in range(0,n):
+
+            m_matrix[j][i] = float(text[j][i])
+
+    for j in range(n,2*n):
+
+        for i in range(0,n):
+
+            k_matrix[j-n][i] = float(text[j][i])
+
+    for i in range(0,n):
+
+        f_vector[i] = float(text[2*n][i])
+
+    omega = float(text[2*n+1][0])
+
+except:
+
+    raise("All values must be floats/integers")
+
+y_vector = y_amplitudes(m_matrix, k_matrix, omega, f_vector)
 
 clock = pygame.time.Clock()
 
-mass_positions = np.array([[0.0,0.0,0.0],[0.0,2.0,2.0]])
+mass_positions = np.zeros((2,3))
 
-omega = 5.0
+for i in range(0,n):
 
-amps = [0.50248756, -0.50248756]
+    mass_positions[i] = np.array([0.0, 2*i, 2*i])
 
 pygame.init()
 
@@ -31,6 +109,10 @@ def Mass(x,y,mass_no):
 
     screen.blit(mass_images[mass_no], [int(50.0*x+350.0), int(600.0-50.0*y)])
 
+def Spring(x0,y0,x1,y1):
+
+    pygame.draw.rect(screen,(50,50,50),pygame.Rect(50*x1+361,632-50*y1,10,50*(y1-y0)-31))
+
 running = True
 
 t = 0.0
@@ -48,9 +130,13 @@ while running:
     # Game Code Here
     for i in range(0,len(mass_positions)):
 
-        mass_positions[i] = np.array([0,mass_positions[i][2] + amps[i]*np.cos(omega*t), mass_positions[i][2]])
+        mass_positions[i] = np.array([0,mass_positions[i][2] + y_vector[i]*np.cos(omega*t), mass_positions[i][2]])
 
         Mass(mass_positions[i][0],mass_positions[i][1],i)
+
+        if i != 0:
+
+            Spring(mass_positions[i-1][0],mass_positions[i-1][1],mass_positions[i][0],mass_positions[i][1])
         
     pygame.display.update()
 
@@ -61,7 +147,7 @@ pygame.display.quit()
 pygame.quit()
 sys.exit()
 
-    
+
 
 
 
