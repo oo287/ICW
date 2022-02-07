@@ -107,11 +107,17 @@ pygame.display.set_icon(icon)
 
 def Mass(x,y,mass_no):
 
-    screen.blit(mass_images[mass_no], [int(50.0*x+350.0), int(600.0-50.0*y)])
-
+    try:
+        screen.blit(mass_images[mass_no], [int(50.0*x+350.0), int(600.0-50.0*y)])
+    except:
+        pass
+    
 def Spring(x0,y0,x1,y1):
 
-    pygame.draw.rect(screen,(50,50,50),pygame.Rect(50*x1+361,632-50*y1,10,50*(y1-y0)-31))
+    try:
+        pygame.draw.rect(screen,(50,50,50),pygame.Rect(50*x1+361,632-50*y1,10,50*(y1-y0)-31))
+    except:
+        pass
 
 running = True
 
