@@ -49,12 +49,13 @@ for line in text[0:-1]:
 
         raise("Dimension Error- Matrices must be square")
 
-if len(text) != 2*n+2:
+if len(text) != 3*n+2:
 
     raise("Dimension Error- Matrices must be of the same size")
 
 m_matrix = np.zeros((n,n))
 k_matrix = np.zeros((n,n))
+l_matrix = np.zeros((n,n))
 f_vector = np.zeros(n)
 omega = 0.0
 
@@ -72,9 +73,15 @@ try:
 
             k_matrix[j-n][i] = float(text[j][i])
 
+    for j in range(2*n,3*n):
+
+        for i in range(0,n):
+
+            l_matrix[j-2*n][i] = float(text[j][i])
+
     for i in range(0,n):
 
-        f_vector[i] = float(text[2*n][i])
+        f_vector[i] = float(text[3*n][i])
 
     #omega = float(text[2*n+1][0])
 
@@ -102,9 +109,17 @@ for i in range(0,no_samples):
     f_vector[0] = m_e*omega*omega*1 # 1m amplitude oscillation of the Earth
 
     try:
-        amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, omega, f_vector))
-    except:
-        amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, omega+delta, f_vector))
+        amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, l_matrix, omega, f_vector),dtype=np.csingle)
+    except Exception as e:
+        print(amplitudes[i])
+        print(m_matrix)
+        print(k_matrix)
+        print(l_matrix)
+        print(omega)
+        print(f_vector)
+        print(y_amplitudes(m_matrix, k_matrix, l_matrix, omega, f_vector))
+        print(e)
+        amplitudes[i] = amplitudes[i-1]
 
     for j in range(0,n):
 
