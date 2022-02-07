@@ -1,4 +1,5 @@
 import numpy as np
+import argparse
 
 class node:
 
@@ -64,7 +65,6 @@ def generate_K_matrix(nodes):
         k_list_below = get_k_list_below(nodes, node)
         K[node.i] = - (k_list_above + k_list_below)   # Add (subtract) this node's contribution to other node positions (m+n)
         K[node.i][node.i] += sum(k_list_above + k_list_below)   # Add summation of all ks as contribution of other nodes to this node's position
-        print("final K", node.i,  K[node.i])
     return K
 
 def get_l_list_above(nodes, focus):
@@ -96,7 +96,6 @@ def generate_L_matrix(nodes):
         l_list_below = get_l_list_below(nodes, node)
         L[node.i] = - (l_list_above + l_list_below)   # Add (subtract) this node's contribution to other node positions (m+n)
         L[node.i][node.i] += sum(l_list_above + l_list_below)   # Add summation of all ks as contribution of other nodes to this node's position
-        print("final L", node.i,  L[node.i])
     return L
 
 def remove_ith_elements(A, i):
@@ -111,10 +110,8 @@ def read_mesh_from_file(filename):
         file.readline()
         for line in file:
             data = line.split(",")
-            print("data",data)
             for i in range(len(data)):
                 data[i] = data[i].strip(" []\n")
-            print("data2",data)
             try:
                 list_length = int((len(data) - 2)/3)            # Length of base_list, k_list, l_list
                 nodes.append(node(int(data[0]),                                     # Create node with specified pk
@@ -129,21 +126,28 @@ def read_mesh_from_file(filename):
                 raise e
     return np.array(nodes)
 
+def save_to_file(M,K,L):
+    pass
+
 def run():
 
-    # CANNOT IMPART AMPLITUDES ON THE GROUND!!!!!!! MAKE GROUND y0??
-    # DOESNT CHECK FOR NONETYPE PKS!!!!!!!!!
+    # Read filename argument
+    ap = argparse.ArgumentParser('Plot response curves')
+    ap.add_argument('--f', type=str, default="mesh.csv", help='Filename of mesh to read, e.g. mesh.csv')
+    args = ap.parse_args()
+
+    # Generate node list from file
+    nodes = read_mesh_from_file(args.f)
     
-    nodes = read_mesh_from_file("mesh.csv")
-    
+    # Validate nodelist and update 'node.i's
     validate_system(nodes)
     assign_matrix_order(nodes)
 
+    # Generate matrices
     M = generate_M_matrix(nodes)
     K = generate_K_matrix(nodes)
     L = generate_L_matrix(nodes)
 
-    print("\n")
     print("Mass matrix:")
     print(M)
     print()
