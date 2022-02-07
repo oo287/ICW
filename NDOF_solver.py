@@ -116,8 +116,8 @@ def read_mesh_from_file(filename):
                 data[i] = data[i].strip(" []\n")
             try:
                 list_length = int((len(data) - 2)/3)            # Length of base_list, k_list, l_list
-                nodes.append(node(int(data[0]),                                     # Create node with specified pk
-                                    int(data[1]),                                   # specified mass
+                nodes.append(node(float(data[0]),                                     # Create node with specified pk
+                                    float(data[1]),                                   # specified mass
                                     list([float(x) for x in data[2:2+list_length]]),                    # specified base_list
                                     list([float(x) for x in data[2+list_length:2+2*list_length]]),      # specified k_list
                                     list([float(x) for x in data[2+2*list_length:2+3*list_length]])     # specified l_list
