@@ -62,9 +62,6 @@ def generate_K_matrix(nodes):
     for node in nodes:
         k_list_above = get_k_list_above(nodes, node)    # Create n-length list of k values that relate to this node (all others are zero), in the same position as their nodes
         k_list_below = get_k_list_below(nodes, node)
-        print("Node:", node.pk)
-        print("k_list_above:", k_list_above)
-        print("k_list_below:", k_list_below)
         K[node.i] = - (k_list_above + k_list_below)   # Add (subtract) this node's contribution to other node positions (m+n)
         K[node.i][node.i] += sum(k_list_above + k_list_below)   # Add summation of all ks as contribution of other nodes to this node's position
         print("final K", node.i,  K[node.i])
@@ -97,9 +94,6 @@ def generate_L_matrix(nodes):
     for node in nodes:
         l_list_above = get_l_list_above(nodes, node)    # Create n-length list of l values that relate to this node (all others are zero), in the same position as their nodes
         l_list_below = get_l_list_below(nodes, node)
-        print("Node:", node.pk)
-        print("l_list_above:", l_list_above)
-        print("l_list_below:", l_list_below)
         L[node.i] = - (l_list_above + l_list_below)   # Add (subtract) this node's contribution to other node positions (m+n)
         L[node.i][node.i] += sum(l_list_above + l_list_below)   # Add summation of all ks as contribution of other nodes to this node's position
         print("final L", node.i,  L[node.i])
@@ -111,24 +105,44 @@ def remove_ith_elements(A, i):
     A = np.delete(A, i, 1)
     return A
 
+def read_mesh_from_file(filename):
+    nodes = [node(0,0)]
+    with open(filename) as file:
+        file.readline()
+        for line in file:
+            data = line.split(",")
+            print("data",data)
+            for i in range(len(data)):
+                data[i] = data[i].strip(" []\n")
+            print("data2",data)
+            try:
+                list_length = int((len(data) - 2)/3)            # Length of base_list, k_list, l_list
+                nodes.append(node(int(data[0]),                                     # Create node with specified pk
+                                    int(data[1]),                                   # specified mass
+                                    list([float(x) for x in data[2:2+list_length]]),                    # specified base_list
+                                    list([float(x) for x in data[2+list_length:2+2*list_length]]),      # specified k_list
+                                    list([float(x) for x in data[2+2*list_length:2+3*list_length]])     # specified l_list
+                                )
+                            )
+            except ValueError as e:
+                print("Invalid (non-numeric) input detected in file", filename)
+                raise e
+    return np.array(nodes)
+
 def run():
 
     # CANNOT IMPART AMPLITUDES ON THE GROUND!!!!!!! MAKE GROUND y0??
     # DOESNT CHECK FOR NONETYPE PKS!!!!!!!!!
-
-    # Simple 2DOF system attached to ground as a test
-    node0 = node(0, 0)
-    node1 = node(0, 1, [0], [1], [2])
-    node2 = node(1, 1, [1], [1], [2])
-    node3 = node(3, 0.5, [1], [1], [2])
-    nodes = np.array([node0, node1, node2, node3])
-    node0 = node(0, 0)
-    node1 = node(1, 1, [0], [1], [2])
+    
+    nodes = read_mesh_from_file("mesh.csv")
+    
     validate_system(nodes)
     assign_matrix_order(nodes)
+
     M = generate_M_matrix(nodes)
     K = generate_K_matrix(nodes)
     L = generate_L_matrix(nodes)
+
     print("\n")
     print("Mass matrix:")
     print(M)
@@ -152,6 +166,8 @@ def run():
     L = remove_ith_elements(L, ground_i)
     print(L)
     print()
+    
+
 
 
 
