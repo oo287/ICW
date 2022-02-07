@@ -105,7 +105,7 @@ def remove_ith_elements(A, i):
     return A
 
 def read_mesh_from_file(filename):
-    nodes = [node(0,0)]
+    nodes = [node(0,6e24)]
     with open(filename) as file:
         file.readline()
         for line in file:

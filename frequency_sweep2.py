@@ -6,12 +6,12 @@ from NDOF_solver import *
 import argparse
 
 ap = argparse.ArgumentParser('Plot response curves')
-ap.add_argument('--f', type=str, default="mesh.csv", help='Filename of mesh to read, e.g. mesh.csv')
+ap.add_argument('--f', type=str, default="mesh.txt", help='Filename of mesh to read, e.g. mesh.csv')
 args = ap.parse_args()
 
 # Generate node list from file
-nodes = read_mesh_from_file(args.f)
-
+nodes, F, omega = read_mesh_from_file(args.f)
+    
 # Validate nodelist and update 'node.i's
 validate_system(nodes)
 assign_matrix_order(nodes)
