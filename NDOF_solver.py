@@ -109,6 +109,8 @@ def read_mesh_from_file(filename):
     with open(filename) as file:
         file.readline()
         for line in file:
+            if line.strip("\n") == "":
+                break
             data = line.split(",")
             for i in range(len(data)):
                 data[i] = data[i].strip(" []\n")
@@ -124,20 +126,22 @@ def read_mesh_from_file(filename):
             except ValueError as e:
                 print("Invalid (non-numeric) input detected in file", filename)
                 raise e
-    return np.array(nodes)
+        f_line = file.readline().strip("\n")
+        F = np.array(np.array(f_line.split(",")).astype(float))
+        o_line = file.readline().strip("\n")
+        omega = np.array(float(o_line))
 
-def save_to_file(M,K,L):
-    pass
+    return np.array(nodes), F, omega
 
 def run():
 
     # Read filename argument
     ap = argparse.ArgumentParser('Plot response curves')
-    ap.add_argument('--f', type=str, default="mesh.csv", help='Filename of mesh to read, e.g. mesh.csv')
+    ap.add_argument('--f', type=str, default="mesh.txt", help='Filename of mesh to read, e.g. mesh.csv')
     args = ap.parse_args()
 
     # Generate node list from file
-    nodes = read_mesh_from_file(args.f)
+    nodes, F, omega = read_mesh_from_file(args.f)
     
     # Validate nodelist and update 'node.i's
     validate_system(nodes)
