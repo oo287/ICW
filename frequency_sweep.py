@@ -2,6 +2,7 @@ from random import randint
 import numpy as np
 from equation_solver import y_amplitudes
 import matplotlib.pyplot as plt
+from NDOF_solver import *
 
 print("\n\nPlease input the name of the txt file to read mass and stiffness matrices and force vector from.\n")
 
@@ -109,16 +110,8 @@ for i in range(0,no_samples):
     f_vector[0] = m_e*omega*omega*1 # 1m amplitude oscillation of the Earth
 
     try:
-        amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, l_matrix, omega, f_vector),dtype=np.csingle)
-    except Exception as e:
-        print(amplitudes[i])
-        print(m_matrix)
-        print(k_matrix)
-        print(l_matrix)
-        print(omega)
-        print(f_vector)
-        print(y_amplitudes(m_matrix, k_matrix, l_matrix, omega, f_vector))
-        print(e)
+        amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, l_matrix, omega, f_vector))
+    except:
         amplitudes[i] = amplitudes[i-1]
 
     for j in range(0,n):
