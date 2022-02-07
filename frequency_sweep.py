@@ -33,9 +33,13 @@ text = []
 
 for line in txt_file:
 
+    line = line.strip("\n")
+
     a = line.split(",")
+
+    text.append(a)
     
-    text.append(a[0:-1]+[a[-1][0:-1]]) # Remove the \n s from the last items on each line
+    #text.append(a[0:-1]+[a[-1][0:-1]]) # Remove the \n s from the last items on each line
 
 n = len(text[0])
 
@@ -102,8 +106,14 @@ for i in range(0,no_samples):
     except:
         amplitudes[i] = np.array(y_amplitudes(m_matrix, k_matrix, omega+delta, f_vector))
 
+    for j in range(0,n):
+
+        amplitudes[i][j] = abs(amplitudes[i][j])
+        
+
 for i in range(1,n):
 
-    plt.plot(omegas,amplitudes[:,i])
+    plt.plot(omegas,amplitudes[:,i],label=str(i))
 
+plt.legend()
 plt.show()
