@@ -62,3 +62,9 @@ plt.xlabel("Excitation frequency / rads-1")
 plt.ylabel("Amplitude / m")
 plt.legend()
 plt.show()
+
+new_file = open("data_"+args.f+".txt","w")
+
+for i in range(0,len(amplitudes)):
+
+    new_file.write(str(amplitudes[i])+str("\n"))
