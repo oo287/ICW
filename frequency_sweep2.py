@@ -58,5 +58,7 @@ for i in range(1,n):
 
     plt.plot(omegas,amplitudes[:,i],label=str(i))
 
+plt.xlabel("Excitation frequency / rads-1")
+plt.ylabel("Amplitude / m")
 plt.legend()
 plt.show()
