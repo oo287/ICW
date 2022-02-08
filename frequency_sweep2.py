@@ -67,4 +67,10 @@ new_file = open("data_"+args.f+".txt","w")
 
 for i in range(0,len(amplitudes)):
 
-    new_file.write(str(amplitudes[i])+str("\n"))
+    line = ""
+
+    for y in amplitudes[i]:
+
+        line = str(line) + str(y) + "," 
+    
+    new_file.write(str(line)+str("\n"))

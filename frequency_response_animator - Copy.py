@@ -2,12 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 names = [
-        "data_3dof_building_tmd5.txt.txt"
+        "data_exp1_2dof_0tmd.txt.txt"
         ]
 
-n = 5
+n = 100000
 
-amplitudes = np.zeros((2,n,3))
+dofs = 2
+
+amplitudes = np.zeros((2,n,dofs))
 
 for i in range(0,len(names)):
 
@@ -21,6 +23,6 @@ for i in range(0,len(names)):
 
         line = float(line)
 
-        amplitudes[i,j,:] = line[0:3]
+        amplitudes[i,j,:] = line[0:dofs]
 
         
