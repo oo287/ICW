@@ -2,17 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 names = [
-        "data_exp1_2dof_0tmd.txt.txt",
-        "data_exp1_2dof_ntmd.txt.txt",
-        "data_exp1_2dof_2tmds.txt.txt",
-        "data_exp1_2dof_2tmdd.txt.txt"
+        "data_exp2_3dof_0tmd.txt.txt",
+        "data_exp2_3dof_ntmd.txt.txt",
+        "data_exp2_3dof_3tmdd.txt.txt",
+        "data_exp2_3dof_3tmds.txt.txt"
         ]
 
 n = 100000
 
 omegas = np.linspace(0.01,100,n)
 
-dofs = 2
+dofs = 3
 
 amplitudes = np.zeros((len(names),n,dofs))
 
@@ -31,8 +31,9 @@ for i in range(0,len(names)):
         for k in range(0,len(line)):
 
             line[k] = float(line[k])
-
+            
         amplitudes[i,j,:] = line[1:dofs+1]
+        
 
     print("Done " + str(names[i]))
 
