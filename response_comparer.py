@@ -36,6 +36,8 @@ dofs = 4
 
 colours = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple"]
 
+legend_names = ["No TMDs","1 Large TMD","1 N-DOF TMD","4 TMDS, separate floors","4 TMDs, same floor"]
+
 n = 100000
 
 omegas = np.linspace(0.01,100,n)
@@ -68,7 +70,7 @@ for j in range(0,len(names)):
 
     for i in range(0,dofs):
         
-        plt.plot(omegas,amplitudes[j,:,i],label=str(names[j]), color=colours[j])
+        plt.plot(omegas,amplitudes[j,:,i],label=str(legend_names[j]), color=colours[j])
 
 plt.xlabel("Excitation Frequency / rad s-1")
 plt.ylabel("Relative Amplitude")
