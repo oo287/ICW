@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-#"""
+"""
 names = [
         "data_exp1_2dof_0tmd.txt.txt",
         "data_exp1_2dof_1tmd.txt.txt",
@@ -10,7 +10,7 @@ names = [
         "data_exp1_2dof_2tmds.txt.txt"
         ]
 dofs = 2
-#"""
+"""
 
 """
 names = [
@@ -23,7 +23,7 @@ names = [
 dofs = 3
 """
 
-"""
+#"""
 names = [
         "data_exp3_4dof_0tmd.txt.txt",
         "data_exp3_4dof_1tmd.txt.txt",
@@ -32,7 +32,7 @@ names = [
         "data_exp3_4dof_4tmds.txt.txt"
         ]
 dofs = 4
-"""
+#"""
 
 colours = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple"]
 
@@ -71,6 +71,6 @@ for j in range(0,len(names)):
         plt.plot(omegas,amplitudes[j,:,i],label=str(names[j]), color=colours[j])
 
 plt.xlabel("Excitation Frequency / rad s-1")
-plt.ylabel("Amplitude / m")
-plt.legend()
+plt.ylabel("Relative Amplitude")
+#plt.legend()
 plt.show()
